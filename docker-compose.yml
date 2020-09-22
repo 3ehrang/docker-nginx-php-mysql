@@ -7,22 +7,26 @@ services:
       context: docker/app
       target: development
     volumes:
-      - .:/var/www/html
+      - ./public:/var/www/html/public
     env_file:
       - .env
     ports:
       - "80:80"
-      - "9001:9001"
     networks:
       - skynet
 
   mysql.database:
     image: mysql
     container_name: skynet-database
-    command: --default-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - 3306:3306
     networks:
       - skynet
 
