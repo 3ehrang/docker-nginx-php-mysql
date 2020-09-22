@@ -1,2 +1,1 @@
-# docker-nginx-php-mysql
-Docker running Nginx, PHP-FPM &amp; MySQL
+## Add your files in public folder 

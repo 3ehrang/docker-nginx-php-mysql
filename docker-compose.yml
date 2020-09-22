@@ -1,0 +1,43 @@
+version: "3.5"
+
+services:
+  app:
+    container_name: skynet-app
+    build:
+      context: docker/app
+      target: development
+    volumes:
+      - .:/var/www/html
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+      - "9001:9001"
+    networks:
+      - skynet
+
+  mysql.database:
+    image: mysql
+    container_name: skynet-database
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - skynet
+
+  adminer:
+    image: adminer
+    container_name: skynet-adminer
+    restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql.database
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql.database
+    networks:
+      - skynet
+networks:
+  skynet:
+    driver: "bridge"
